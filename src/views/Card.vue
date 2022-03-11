@@ -199,13 +199,14 @@ export default defineComponent({
       }
       .department:hover {
         .hover-box();
-        animation: ants 0.8s linear infinite;
+        animation: ants 1.2s linear infinite;
       }
       .background {
         cursor: default;
       }
       .number:hover {
         .hover-box();
+        animation: ants 2.5s linear infinite;
         border-left: 2px solid #000;
       }
     }

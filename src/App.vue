@@ -80,7 +80,7 @@
 
 <script lang="ts">
 import { FuncBar, Student } from '@/use/classUse'
-import { triggerFunc, handleSelect } from '@/use/funcUse'
+import { triggerFunc, handleSelect, checkNumber } from '@/use/funcUse'
 import { currentId } from '@/use/dataUse'
 import {
   NLayout,
@@ -103,10 +103,10 @@ const funcArr: Array<FuncBar> = [
 export default defineComponent({
   setup() {
     const studentArr: Array<Student> = [
-      new Student(0, 'andy', 'syb', '2201110201'),
-      new Student(1, '张三丰', '事业部', '20B1110201'),
-      new Student(2, 'wwwandy', 'syb', '19S1110201'),
-      new Student(3, 'Null', 'NaN', '19*1110201'),
+      new Student(0, '张三丰', '事业部', '17B111201'),
+      new Student(1, 'James Brown', '运营部', '2201110201'),
+      new Student(2, '白', '吉祥物', '19S686666'),
+      new Student(4, '请输入姓名', '请输入部门', '请输入学号'),
     ]
     const events = reactive({
       appCurrentId: currentId,
@@ -114,21 +114,32 @@ export default defineComponent({
       refresh: true,
     })
     function changeProp(prop: string, propName: string) {
-      const newProp = prompt(
+      let newProp: string | null = prompt(
         '原' + propName + '为：' + prop + '，请输入修改后的' + propName
       )
-      if (newProp) {
+      if (newProp && !newProp.split('').every((value) => value === ' ')) {
         studentArr.some((value) => {
           if (value.id === events.appCurrentId) {
             switch (propName) {
               case '名字':
-                value.sName = newProp
+                value.sName = newProp as string
                 break
               case '部门':
-                value.sDepartment = newProp
+                value.sDepartment = newProp as string
                 break
               case '学号':
-                value.sNumber = newProp
+                while (!!checkNumber(newProp as string)) {
+                  alert(checkNumber(newProp as string))
+                  newProp = prompt(
+                    '原' +
+                      propName +
+                      '为：' +
+                      prop +
+                      '，请输入修改后的' +
+                      propName
+                  )
+                }
+                value.sNumber = newProp as string
                 break
             }
             chooseCard(events.appCurrentId)
@@ -237,6 +248,7 @@ export default defineComponent({
     .my-card {
       flex: 19;
       margin: 0 1.4vh;
+      overflow: hidden;
     }
     .my-card:hover {
       box-shadow: 0 0 20px 1px #ddd;
@@ -249,7 +261,7 @@ export default defineComponent({
     }
   }
   .new-card .new-sign {
-    border: 2px solid #ddd;
+    border: 1px solid #ddd;
     text-align: center;
     line-height: 20vh;
     font-size: 12vh;
@@ -270,11 +282,13 @@ export default defineComponent({
     height: @view-height;
     box-shadow: 0 0 20px 2px #eee;
     background-color: rgb(252, 250, 254);
+    overflow: hidden;
   }
 }
 
 /deep/ .card-box *,
 /deep/.aside-item-container * {
   background-color: rgb(252, 250, 254);
+  white-space: nowrap;
 }
 </style>

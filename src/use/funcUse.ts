@@ -38,3 +38,17 @@ export function numToYear(number: string): number {
   return res;
 }
 
+export function checkNumber(number: string): string {
+  const checkReg = /[^BbDd\d]/
+  if (number.length < 9 || number.length > 10) {
+    return '您输入的学号长度有误'
+  }
+  if (checkReg.test(number)) {
+    return '您输入的学号含有非法字符'
+  }
+  if (numToYear(number) <= 0) {
+    return '您输入的学号中入学年份有误'
+  }
+  return '';
+}
+
