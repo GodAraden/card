@@ -1,0 +1,51 @@
+{
+  "id": "3234494",
+  "name": "card",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "672036",
+      "name": "下拉",
+      "font_class": "xiala",
+      "unicode": "e6b9",
+      "unicode_decimal": 59065
+    },
+    {
+      "icon_id": "10789823",
+      "name": "导入表单-资料_操作_jurassic",
+      "font_class": "jurassic_import-form",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
+      "icon_id": "12770901",
+      "name": "批量编辑",
+      "font_class": "piliangbianji",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "14472284",
+      "name": "导出文件",
+      "font_class": "daochuwenjian",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "18169660",
+      "name": "打印机,打印,传真,复印机",
+      "font_class": "print",
+      "unicode": "e931",
+      "unicode_decimal": 59697
+    },
+    {
+      "icon_id": "24859978",
+      "name": "下载-文件下载-13",
+      "font_class": "xiazai-wenjianxiazai-13",
+      "unicode": "e856",
+      "unicode_decimal": 59478
+    }
+  ]
+}
