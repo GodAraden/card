@@ -1,0 +1,226 @@
+<template>
+  <div class="model" v-bind:style="{ display: isShow }">
+    <div
+      class="model-bg"
+      v-bind:style="{ display: isShow }"
+      @click="$emit('eModelClose')"
+    ></div>
+    <div class="model-show" v-bind:style="{ display: isShow }">
+      <div class="model-header">
+        <h3>
+          <span class="header-item">管理所有工位牌信息</span>
+          <n-button class="header-item" text-color="#4D7DCD" round>
+            新建工位牌
+          </n-button>
+        </h3>
+      </div>
+      <div class="model-content">
+        <n-data-table
+          :key="(row) => row.id"
+          :columns="columns"
+          :data="data"
+          :max-height="320"
+          virtual-scroll
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { h, defineComponent, ref, nextTick } from 'vue'
+import { NButton, NInput, NDataTable } from 'naive-ui'
+import { Student } from '@/use/classUse'
+
+const ShowOrEdit = defineComponent({
+  props: {
+    value: [String, Number],
+    onUpdateValue: [Function, Array],
+  },
+  setup(props) {
+    const isEdit = ref(false)
+    const inputRef = ref<HTMLElement | null>(null)
+    const inputValue = ref(props.value)
+    function handleOnClick() {
+      isEdit.value = true
+      nextTick(() => {
+        !!inputRef.value && inputRef.value.focus()
+      })
+    }
+    function handleChange() {
+      typeof props.onUpdateValue === 'function' &&
+        props.onUpdateValue(inputValue.value)
+      isEdit.value = false
+    }
+    return () =>
+      h(
+        'div',
+        {
+          onClick: handleOnClick,
+        },
+        // 管他呢，能跑就行
+        isEdit.value
+          ? h(NInput, {
+              ref: inputRef,
+              value: inputValue.value,
+              onUpdateValue: (v: string) => {
+                inputValue.value = v
+              },
+              onChange: handleChange,
+              onBlur: handleChange,
+            })
+          : props.value
+      )
+  },
+})
+
+export default defineComponent({
+  props: {
+    isShow: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: Array,
+      required: true,
+    },
+  },
+  setup(props) {
+    const data = ref(props.content as Array<Student>)
+    return {
+      data,
+      columns: [
+        {
+          title: '序号',
+          key: 'index',
+          width: 55,
+          render(row: Student, index: number) {
+            return h('div', {
+              innerHTML: row.id,
+            })
+          },
+        },
+        {
+          title: '姓名',
+          key: 'name',
+          width: 120,
+          render(row: Student, index: number) {
+            return h(ShowOrEdit, {
+              value: row.sName,
+              onUpdateValue(v: string) {
+                data.value[index].sName = v
+              },
+            })
+          },
+        },
+        {
+          title: '部门',
+          key: 'department',
+          width: 120,
+          render(row: Student, index: number) {
+            return h(ShowOrEdit, {
+              value: row.sDepartment,
+              onUpdateValue(v: string) {
+                data.value[index].sDepartment = v
+              },
+            })
+          },
+        },
+        {
+          title: '学历',
+          key: 'background',
+          width: 120,
+          render(row: Student, index: number) {
+            return h('div', {
+              innerHTML: row.sBackground,
+            })
+          },
+        },
+        {
+          title: '学号',
+          key: 'number',
+          render(row: Student, index: number) {
+            return h(ShowOrEdit, {
+              value: row.sNumber,
+              onUpdateValue(v: string) {
+                data.value[index].sNumber = v
+              },
+            })
+          },
+        },
+        {
+          title: '操作',
+          key: 'delete',
+          render(row: Student, index: number) {
+            return h(NButton, {
+              innerHTML: '删除',
+            })
+          },
+        },
+      ],
+      pagination: {
+        pageSize: 5,
+      },
+    }
+  },
+  components: {
+    'n-data-table': NDataTable,
+    'n-button': NButton,
+  },
+})
+</script>
+
+<style lang="less" scoped>
+.model {
+  display: none;
+  .model-bg {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 1001;
+    -moz-opacity: 0.3;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+  }
+
+  .model-show {
+    display: none;
+    position: absolute;
+    top: 15%;
+    left: 20%;
+    width: 60%;
+    height: auto;
+    padding: 8px;
+    background-color: white;
+    box-shadow: 0 0 40px 8px #888;
+    z-index: 1002;
+    overflow: auto;
+    .model-header {
+      margin: 10px;
+      h3 {
+        display: flex;
+        .header-item:first-of-type {
+          flex: 4;
+        }
+        .header-item:last-child {
+          flex: 1;
+        }
+      }
+    }
+    .model-content {
+      border-radius: 2px;
+    }
+  }
+  .n-button {
+    color: #215cc1;
+  }
+  /deep/ .n-button:hover {
+    color: #215cc1;
+    outline: none;
+  }
+}
+</style>

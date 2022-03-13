@@ -233,7 +233,7 @@ export default defineComponent({
       span {
         padding: 0 1em;
         border: 1px solid transparent;
-        border-left: 0.2em solid #000;
+        border-left: 2px solid #000;
         box-sizing: border-box;
       }
       .department {
@@ -262,11 +262,11 @@ export default defineComponent({
       font-size: 3.8em;
     }
     .finished-year {
-      background: #f3eff6
+      background: #eed0d0
         repeating-linear-gradient(
           120deg,
           transparent 0 1.5vh,
-          #e2bfbf 1.5vh 1.6vh
+          #eed0d0 1.5vh 1.6vh
         );
     }
   }

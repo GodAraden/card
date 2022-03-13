@@ -20,10 +20,9 @@ export default defineComponent({
   },
   setup(props) {
     const headerContainer = ref<HTMLElement | null>(null)
-    const rootFontSize = props.rootFontSize
     onMounted(() => {
       if (!!headerContainer.value) {
-        headerContainer.value.style.fontSize = rootFontSize
+        headerContainer.value.style.fontSize = props.rootFontSize
       }
     })
     return {
@@ -48,7 +47,8 @@ export default defineComponent({
     flex: 4;
     font-family: '华文新魏';
     font-weight: 600;
-    font-size: 3.2em;
+    font-size: 3em;
+    // chrome有一个最小字体的问题，影响了视觉效果
   }
 }
 </style>
