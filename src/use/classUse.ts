@@ -1,4 +1,5 @@
-import {numToBackground} from '@/use/funcUse'
+// 类定义
+import { numToBackground } from '@/use/funcUse'
 
 export class FuncBar {
   public funcId: number
@@ -13,6 +14,8 @@ export class FuncBar {
   }
 }
 
+// 本来打算用getter/setter模式+private变量，结果搞完localStorage之后
+// 出了大问题。没办法我还是舍弃不掉localStorage😂
 export class Student{
   public id: number;
   public sName: string = '';

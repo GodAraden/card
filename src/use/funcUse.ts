@@ -1,3 +1,5 @@
+// 一些通用的函数
+
 import { Student } from '@/use/classUse'
 import { nextTick } from '@vue/runtime-core';
 
@@ -5,6 +7,7 @@ export function saveToLocal(studentArr: Array<Student>) {
   localStorage.setItem('studentArr', JSON.stringify(studentArr))
 }
 
+// 新信息的id是全局唯一的，所以依靠localStorage即用即取
 export function getNewStuId(): number{
   return !!localStorage.getItem('newStuId')
       ? JSON.parse(localStorage.getItem('newStuId') as string)
@@ -14,7 +17,8 @@ export function setNewStuId(newId: number) {
   localStorage.setItem('newStuId', newId+'')
 }
 
-export function numToBackground(number: string|undefined): string {
+export function numToBackground(number: string | undefined): string {
+  // 学号转学历的函数
   let res: string = '';
   if (!number) return res;
   if (number.charAt(2) >= '0' && number.charAt(2) <= '9') {
@@ -32,7 +36,8 @@ export function numToBackground(number: string|undefined): string {
   return res;
 }
 
-export function numToYear(number: string|undefined): number {
+export function numToYear(number: string | undefined): number {
+  // 学号转入学年份的函数
   let res: number = -1;
   const nowYear = +new Date().getFullYear();
   if (!number) return res;
@@ -50,6 +55,7 @@ export function numToYear(number: string|undefined): number {
 }
 
 export function checkNumber(number: string | null): string |null{
+  // 检查学号合法性的函数
   const checkReg = /[^BbSs\d]/
   if (number === null) return null;
   if (number.length < 9 || number.length > 10 || (!(number.charAt(2)>='0'&&number.charAt(2)<='9')&&number.length === 10) ) {
@@ -63,7 +69,9 @@ export function checkNumber(number: string | null): string |null{
   }
   return '';
 }
+
 export function chooseCardDetail(id: number, events:{ [propName: string]: any},studentArr:Array<Student>) {
+  // 选中某张工位牌函数的实现细节
   events.selectedId = id
   if (
     !studentArr.some((value: Student) => {
@@ -87,6 +95,7 @@ export function chooseCardDetail(id: number, events:{ [propName: string]: any},s
 }
 
 export function changePropDetail(prop: string, propName: string, selectedId: number, studentArr: Array<Student>) {
+  // 改变某个属性的实现细节
   let newProp: string | null = prompt('原' + propName + '为：' + prop + '，请输入修改后的' + propName)
   if (newProp && !newProp.split('').every((value) => value === ' ')) {
     return studentArr.some((value: Student) => {

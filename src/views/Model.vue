@@ -89,14 +89,17 @@ export default defineComponent({
     isShow: {
       type: String,
       required: true,
+      // 模态框显示或者隐藏
     },
     content: {
       type: Array,
       required: true,
+      // 要展示的数据
     },
     showDataType: {
       type: String,
       required: true,
+      // 用于区分展示的数据是原有数据还是导入数据，以便进行下一步操作
     },
   },
   setup(props) {
@@ -160,6 +163,7 @@ export default defineComponent({
       this.$emit('eModelClose', param)
     },
     checkArr() {
+      // 检查是否存在非法数据（我后来才知道composition API的方法也可以写到methods选项里面，，，
       this.events.error = []
       for (const k of this.events.data) {
         if (

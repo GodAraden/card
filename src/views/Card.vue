@@ -3,6 +3,7 @@
     <n-layout-header>
       <my-card-header :rootFontSize="rootFontSize"></my-card-header>
     </n-layout-header>
+    <!-- 决定该组件是用于左边预览区域还是右边编辑区域 -->
     <div v-if="showDetail" class="props-with-func">
       <div class="name" @click="$emit('changeProp', sName, '名字')">
         {{ sName }}

@@ -1,3 +1,10 @@
+/*
+*
+* 最开始打算搞那种点击某数据然后该数据所在的位置变成输入框，并且可以直接编辑原数据的那种
+* 结果函数式组件玩不明白，然后，就没有然后了
+*
+*/
+
 <template>
   <div class="model" v-bind:style="{ display: isShow }">
     <div

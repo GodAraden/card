@@ -1,5 +1,6 @@
 <template>
   <n-layout>
+    <!-- 页面头部功能区域 -->
     <n-layout-header bordered>
       <div class="logo"></div>
       <div
@@ -11,6 +12,7 @@
       >
         <span :class="'iconfont icon-' + item.funcIcon"></span>
         <span class="funcText">
+          <!-- 根据funcArr数组中元素hasDrop属性决定是否要展示下拉菜单 -->
           {{ item.hasDrop ? '' : item.funcName }}
           <n-dropdown
             v-if="item.hasDrop"
@@ -26,7 +28,9 @@
       </div>
       <div class="space"></div>
     </n-layout-header>
+    <!-- 头部部分结束 -->
 
+    <!-- 内容部分，包括左边的预览展示栏和右边的主体编辑区域 -->
     <n-layout has-sider sider-placement="right">
       <n-layout-content :native-scrollbar="false" content-style="padding: 8px;">
         <div
@@ -35,6 +39,8 @@
           :key="item.id"
         >
           <span>{{ index + 1 + '.' }}</span>
+          <!-- my-card组件中含有一个rootFontSize属性是因为最开始想用传入字体大小来决定组件展示出来的效果大小
+            结果在chrome上面出现了一个浏览器自带的最小字体大小限制，然后就显示异常了，现在采用scale等比例缩放 -->
           <my-card
             v-if="refresh"
             :ref="cards"
@@ -78,6 +84,9 @@
         </div>
       </n-layout-sider>
     </n-layout>
+    <!-- 内容部分结束 -->
+
+    <!-- 两个模态框，用于展示所有信息和导入的信息 -->
     <my-model
       v-if="refresh"
       :isShow="isShow"
@@ -127,6 +136,7 @@ const funcArr: Array<FuncBar> = [
   new FuncBar(3, '打印', 'print', false),
 ]
 function uploadFile() {
+  // 非input元素上传文件的做法
   const inputObj = document.createElement('input')
   inputObj.setAttribute('id', 'file')
   inputObj.setAttribute('type', 'file')
@@ -157,6 +167,7 @@ export default defineComponent({
     const arrFromExcel: Array<Student> = []
     const events = reactive({
       selectedId: 0,
+      // 在无数据时，默认的提示信息
       studentRef: new Student(-1, '↖点这里新建工位牌', '某部门', '20S202020'),
       refresh: true,
       isShow: 'none',
@@ -164,9 +175,8 @@ export default defineComponent({
       tempArr: arrFromExcel,
       arr: [],
       cards: (el: HTMLElement) => {
-        if (!(events.arr as Array<HTMLElement>).some((value) => value === el)) {
-          ;(events.arr as Array<HTMLElement>).push(el)
-        }
+        if (!(events.arr as Array<HTMLElement>).some((value) => value === el))
+          (events.arr as Array<HTMLElement>).push(el)
       },
       isPrint: false,
     })
@@ -202,9 +212,11 @@ export default defineComponent({
     function triggerFunc(id: number) {
       switch (id) {
         case 0:
+          // id为0，管理数据
           events.isShow = 'block'
           break
         case 1:
+          // id为1，导入文件
           uploadFile().addEventListener('change', (changeE: any) => {
             let newStuId = getNewStuId()
             for (let entry of changeE.target.files) {
@@ -232,11 +244,21 @@ export default defineComponent({
           break
         case 2:
         case 3:
+          // id为2：导出pdf，id为3：直接打印
           if (studentArr.length === 0) {
             alert('请先新建一个工位牌，，，')
             return
           }
+          // 在构造pdf对象前修改my-card组件的类以保证pdf能够正常、清晰的导出
           events.isPrint = true
+          // 重新获取DOM对象的引用，同样是为了正常使用pdf功能
+          events.arr = []
+          events.cards = (el: HTMLElement) => {
+            if (
+              !(events.arr as Array<HTMLElement>).some((value) => value === el)
+            )
+              (events.arr as Array<HTMLElement>).push(el)
+          }
           nextTick(() => {
             let pdf = new jsPDF('l', 'cm')
             let promiseArray: Array<Promise<void>> = []
@@ -244,6 +266,7 @@ export default defineComponent({
               const t = createPromiseArray(i, pdf, events.arr.length)
               if (t !== null) promiseArray.push(t)
             }
+            // Promise的all方法，让pdf上的所有工位牌绘制完成后再导出
             Promise.all(promiseArray)
               .then(() => {
                 if (id === 2) pdf.save('card.pdf')
@@ -261,6 +284,7 @@ export default defineComponent({
     }
 
     function createPromiseArray(i: number, pdf: jsPDF, l: number) {
+      // 绘制工位牌到pdf的函数，返回一个Promise对象
       return html2canvas(events.arr[i]['container'] as HTMLElement).then(
         (canvas) => {
           let imgData = canvas.toDataURL('image/jpeg', 1.0)
@@ -277,6 +301,7 @@ export default defineComponent({
       )
     }
     function newStudent() {
+      // 新建工位牌信息，id是即用即取的
       let newStuId = getNewStuId()
       studentArr.push(new Student(newStuId++))
       chooseCard(newStuId - 1)
@@ -293,6 +318,7 @@ export default defineComponent({
       reader.readAsBinaryString(file)
     }
     if (studentArr.length !== 0) {
+      // 载入页面后，若存在一定的数据，则选中第一个工位牌
       events.studentRef = studentArr[0]
       events.selectedId = studentArr[0].id
     }
